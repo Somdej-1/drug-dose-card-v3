@@ -1201,6 +1201,18 @@ function filterDrug(val){
 }
 
 /* ── INIT ─────────────────────────────────────────────────── */
+/* ── GOOGLE SHEET VISITOR COUNTER ─────────────────────────── */
+(function trackVisitorToSheet() {
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyhWTOAS8F61_YHy1zr8tde6KqLWCNm5nQNzYjJBPOeOuE5tFTfxW8KQBC4G6Z9G8k/exec";
+  
+  // ป้องกันการนับซ้ำหากผู้ใช้กด Refresh รัวๆ ในเซสชันเดียวกัน (นับ 1 ครั้งต่อการเปิดแท็บ)
+  if (!sessionStorage.getItem('er_card_counted')) {
+    const ua = encodeURIComponent(navigator.userAgent.substring(0, 80));
+    fetch(`${WEB_APP_URL}?ua=${ua}`, { mode: 'no-cors' })
+      .then(() => sessionStorage.setItem('er_card_counted', 'true'))
+      .catch(err => console.log('Tracking skipped'));
+  }
+})();
 updateAll();
 </script>
 </body>
